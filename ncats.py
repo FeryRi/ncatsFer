@@ -183,7 +183,19 @@ nn.train(train_data, train_labels, epochs=200, batch_size=10)
 # predict
 predictions = nn.predict(test_data)
 print(predictions)
+
+# Redondear a 0 o 1
+rounded_predictions = np.round(predictions).astype(int)  
+
+for i, (pred, image) in enumerate(zip(rounded_predictions, test_data_flattened)):
+    # Revertir la normalización y remodelar a 64x64x3
+    img = (image * 255).astype(np.uint8).reshape(64, 64, 3)
+    
+    if pred == 1:
+        plt.imsave(f'dataset/predict/cat/cat{i}.png', img)
+    else:
+        plt.imsave(f'dataset/predict/nocat/nocat{i}.png', img)
+
 # Test the model
 accuracy = nn.test_accuracy(test_data, test_labels)
 print(f'Test Accuracy: {accuracy * 100:.2f}%')
-
